@@ -1,14 +1,16 @@
 @use './constants' as *;
 @use '../node_modules/@brybrant/sass-okhsv-okhsl' as convert;
 
+$font-path: '/fonts/Teko/Teko';
+
 @font-face {
   font-weight: 400;
   font-style: normal;
   font-family: Teko;
   src:
-    url('/fonts/Teko-Regular.woff2') format('woff2'),
-    url('/fonts/Teko-Regular.woff') format('woff'),
-    url('/fonts/Teko-Regular.ttf') format('truetype');
+    url('#{$font-path}-Regular.woff2') format('woff2'),
+    url('#{$font-path}-Regular.woff') format('woff'),
+    url('#{$font-path}-Regular.ttf') format('truetype');
   font-display: swap;
 }
 

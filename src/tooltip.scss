@@ -1,11 +1,13 @@
+$font-path: '/fonts/FiraSansExtraCondensed/FiraSansExtraCondensed';
+
 @font-face {
   font-weight: 400;
   font-style: normal;
   font-family: 'Fira Sans Extra Condensed';
   src:
-    url('/fonts/FiraSansExtraCondensed-Regular.woff2') format('woff2'),
-    url('/fonts/FiraSansExtraCondensed-Regular.woff') format('woff'),
-    url('/fonts/FiraSansExtraCondensed-Regular.ttf') format('truetype');
+    url('#{$font-path}-Regular.woff2') format('woff2'),
+    url('#{$font-path}-Regular.woff') format('woff'),
+    url('#{$font-path}-Regular.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -14,9 +16,9 @@
   font-style: normal;
   font-family: 'Fira Sans Extra Condensed';
   src:
-    url('/fonts/FiraSansExtraCondensed-SemiBold.woff2') format('woff2'),
-    url('/fonts/FiraSansExtraCondensed-SemiBold.woff') format('woff'),
-    url('/fonts/FiraSansExtraCondensed-SemiBold.ttf') format('truetype');
+    url('#{$font-path}-SemiBold.woff2') format('woff2'),
+    url('#{$font-path}-SemiBold.woff') format('woff'),
+    url('#{$font-path}-SemiBold.ttf') format('truetype');
   font-display: swap;
 }
 
