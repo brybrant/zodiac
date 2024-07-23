@@ -74,13 +74,6 @@
   position: absolute;
   width: 10px;
   height: 10px;
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 5px solid #fff;
-    transform: rotate(45deg);
-  }
+  background: #fff;
+  transform: rotate(45deg);
 }
