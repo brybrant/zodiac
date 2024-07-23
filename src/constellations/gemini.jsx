@@ -1,4 +1,4 @@
-export const Stars ={
+export const Stars = {
   beta: {
     name: 'Pollux',
     magnitude: 1.14,
