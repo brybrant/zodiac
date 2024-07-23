@@ -1,0 +1,50 @@
+#stars-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: url('/stars.webp') 50% 50%;
+  will-change: transform;
+}
+
+.constellation {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  path {
+    fill: none;
+    stroke: #fff;
+    stroke-opacity: 0.8;
+  }
+}
+
+@keyframes move {
+  100% {
+    transform: translateZ(10px);
+  }
+}
+
+.star {
+  border-radius: 50%;
+  cursor: pointer;
+  fill: #fff;
+  transform: translateZ(0);
+  animation: 1s linear 0s infinite move;
+  will-change: transform;
+  backface-visibility: hidden;
+
+  &.active {
+    outline: 1px solid rgba(#fff, 0.5);
+    outline-offset: 1px;
+  }
+}
+
+.glyph {
+  pointer-events: none;
+  fill: none;
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3px;
+}

@@ -1,0 +1,102 @@
+@use './constants' as *;
+
+.border {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50vw;
+  pointer-events: none;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: $dark-background;
+    pointer-events: auto;
+  }
+
+  &:after {
+    width: 8px;
+  }
+}
+
+.border--left {
+  right: 100%;
+
+  &:before {
+    right: 8px;
+    left: 0;
+  }
+
+  &:after {
+    right: 0;
+  }
+}
+
+.border--right {
+  left: 100%;
+
+  &:before {
+    right: 0;
+    left: 8px;
+  }
+
+  &:after {
+    left: 0;
+  }
+}
+
+.border-container {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  pointer-events: auto;
+
+  &:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: $dark-background;
+  }
+}
+
+.border-container--top {
+  top: 0;
+
+  &:before, .border:before, .border:after {
+    border-bottom: 1px solid #fff;
+  }
+
+  .border:before {
+    bottom: 8px;
+  }
+
+  .border--left:after {
+    transform: translateY(-4px) skewY(45deg);
+  }
+
+  .border--right:after {
+    transform: translateY(-4px) skewY(-45deg);
+  }
+}
+
+.border-container--bottom {
+  bottom: 0;
+
+  &:before, .border:before, .border:after {
+    border-top: 1px solid #fff;
+  }
+
+  .border:before {
+    top: 8px;
+  }
+
+  .border--left:after {
+    transform: translateY(4px) skewY(-45deg);
+  }
+
+  .border--right:after {
+    transform: translateY(4px) skewY(45deg);
+  }
+}

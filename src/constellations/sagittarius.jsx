@@ -1,0 +1,158 @@
+export const Stars = {
+  epsilon: {
+    placement: 'left-start',
+    name: 'Kaus Australis',
+    magnitude: 1.85,
+    temperature: 10516,
+    x: 670.443,
+    y: 562.6329,
+  },
+  sigma: {
+    placement: 'left-end',
+    name: 'Nunki',
+    magnitude: 2.02,
+    temperature: 14087,
+    x: 456.8924,
+    y: 280.7278,
+  },
+  zeta: {
+    placement: 'bottom-end',
+    name: 'Ascella',
+    magnitude: 2.6,
+    temperature: 9226,
+    x: 402.038,
+    y: 401.1456,
+  },
+  delta: {
+    placement: 'top-start',
+    name: 'Kaus Media',
+    magnitude: 2.7,
+    temperature: 3983,
+    x: 705.5316,
+    y: 411.3987,
+  },
+  lambda: {
+    placement: 'right-start',
+    name: 'Kaus Borealis',
+    magnitude: 2.81,
+    temperature: 4649,
+    x: 665.2025,
+    y: 259.538,
+  },
+  pi: {
+    placement: 'left-start',
+    name: 'Albaldah',
+    magnitude: 2.89,
+    temperature: 7158,
+    x: 343.6519,
+    y: 103.3291,
+  },
+  gamma2: {
+    placement: 'right-start',
+    name: 'Alnasl',
+    magnitude: 2.99,
+    temperature: 4743,
+    x: 813.2089,
+    y: 442.7089,
+  },
+  eta: {
+    placement: 'bottom',
+    magnitude: 3.11,
+    temperature: 3705,
+    x: 708.3228,
+    y: 645.8544,
+  },
+  phi: {
+    magnitude: 3.17,
+    temperature: 11744,
+    x: 528.6646,
+    y: 305.6582,
+  },
+  tau: {
+    placement: 'top-end',
+    magnitude: 3.32,
+    temperature: 4328,
+    x: 369.6835,
+    y: 327.2089,
+  },
+  xi2: {
+    placement: 'top-start',
+    magnitude: 3.51,
+    temperature: 4348,
+    x: 439.2342,
+    y: 105.6835,
+  },
+  omicron: {
+    placement: 'bottom-end',
+    magnitude: 3.77,
+    temperature: 4719,
+    x: 383.7911,
+    y: 127.443,
+  },
+  mu: {
+    name: 'Polis',
+    magnitude: 3.86,
+    temperature: 7938,
+    x: 787.8418,
+    y: 122.2025,
+  },
+  rho1: {
+    placement: 'left-start',
+    magnitude: 3.93,
+    temperature: 8011,
+    x: 243.9304,
+    y: 0,
+  },
+  alpha: {
+    name: 'Rukbat',
+    magnitude: 3.97,
+    temperature: 11573,
+    x: 265.6709,
+    y: 766.1867,
+  },
+  beta1: {
+    placement: 'right-end',
+    name: 'Arkab Prior',
+    magnitude: 4.01,
+    temperature: 11573,
+    x: 279.9304,
+    y: 895.3671,
+  },
+  iota: {
+    placement: 'bottom-end',
+    magnitude: 4.13,
+    temperature: 4559,
+    x: 67.3576,
+    y: 825.7405,
+  },
+  beta2: {
+    placement: 'right-end',
+    name: 'Arkab Posterior',
+    magnitude: 4.29,
+    temperature: 7217,
+    x: 277.2342,
+    y: 906.6456,
+  },
+  theta1: {
+    placement: 'right',
+    magnitude: 4.37,
+    temperature: 12489,
+    x: 10.0253,
+    y: 609.3987,
+  },
+  omega: {
+    name: 'Terebellum',
+    magnitude: 4.7,
+    temperature: 5436,
+    x: 0,
+    y: 305.9905,
+  },
+};
+
+export const Glyph = (
+  <>
+    <polyline points='63 41 63 17 38 17'/>
+    <line x1='17' y1='64' x2='63' y2='17'/>
+    <line x1='22' y1='36' x2='45' y2='58'/>
+  </>
+);
