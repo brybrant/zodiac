@@ -232,13 +232,17 @@ export default () => {
 
     backgroundCSS.transitionProperty = 'transform';
     backgroundCSS.transitionTimingFunction = animationTimingFunc;
-    backgroundCSS.backgroundSize = `${documentWidth * 0.5}px`;
+    backgroundCSS.backgroundSize = `${
+      documentWidth > 1024 ? documentWidth * 0.5 : documentWidth
+    }px`;
     backgroundCSS.width = `${documentWidth * 7.5}px`;
     backgroundCSS.transform = translate(slider.index + 1);
 
     slider.on('resize', () => {
       documentWidth = document.body.offsetWidth;
-      backgroundCSS.backgroundSize = `${documentWidth * 0.5}px`;
+      backgroundCSS.backgroundSize = `${
+        documentWidth > 1024 ? documentWidth * 0.5 : documentWidth
+      }px`;
       backgroundCSS.width = `${documentWidth * 7.5}px`;
       backgroundCSS.transform = translate(slider.index + 1);
     });
