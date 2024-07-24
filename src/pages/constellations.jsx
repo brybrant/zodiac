@@ -285,6 +285,7 @@ export default () => {
     slider.on('swipe.start', () => backgroundCSS.transitionDuration = '');
 
     slider.on('swipe.move', () => {
+      document.dispatchEvent(slide);
       backgroundCSS.transform = `translateX(${swipeTranslate}px)`;
     });
 
