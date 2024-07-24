@@ -104,7 +104,7 @@ $bullets-padding: 4px;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
 
-  @media (width > 490px) {
+  @media (width > 540px) {
     padding-bottom: $bullets-height * 2 - $bullets-padding * 2 + $slide-padding;
   }
 
@@ -146,7 +146,7 @@ $bullets-padding: 4px;
   user-select: none;
   -webkit-touch-callout: none;
 
-  @media (width > 490px) {
+  @media (width > 540px) {
     bottom: $bullets-height * 2 - $bullets-padding * 4;
   }
 
@@ -226,7 +226,7 @@ $bullets-padding: 4px;
   user-select: none;
   -webkit-touch-callout: none;
 
-  @media (width > 490px) {
+  @media (width > 540px) {
     width: ($bullets-height - $bullets-padding * 2) * 6 + $bullets-padding * 2;
   }
 
@@ -275,6 +275,22 @@ $bullets-padding: 4px;
   }
 }
 
-.glide--rtl {
-  direction: rtl;
+.glide__github-link {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: $bullets-height - 8px;
+  height: $bullets-height - 8px;
+  padding: 8px;
+  pointer-events: auto;
+
+  a {
+    color: #fff;
+    opacity: 0.5;
+
+    &:hover {
+      color: #fff;
+      opacity: 1;
+    }
+  }
 }
