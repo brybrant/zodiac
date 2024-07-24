@@ -24,7 +24,7 @@
     "preact": "^10.22.1"
   },
   "devDependencies": {
-    "@brybrant/configs": "github:brybrant/configs#4e90e5a5fcbc1273dfb7294926e054e3c17be5b3",
+    "@brybrant/configs": "github:brybrant/configs",
     "@brybrant/sass-okhsv-okhsl": "github:brybrant/sass-okhsv-okhsl",
     "@preact/preset-vite": "^2.9.0",
     "eslint-config-preact": "^1.4.0",
