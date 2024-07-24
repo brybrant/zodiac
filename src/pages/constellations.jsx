@@ -239,6 +239,8 @@ export default () => {
     backgroundCSS.transform = translate(slider.index + 1);
 
     slider.on('resize', () => {
+      document.dispatchEvent(slide);
+
       documentWidth = document.body.offsetWidth;
       backgroundCSS.backgroundSize = `${
         documentWidth > 1024 ? documentWidth * 0.5 : documentWidth
