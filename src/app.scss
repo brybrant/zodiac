@@ -83,11 +83,11 @@ h1 {
 }
 
 a {
-  color: convert.color_to_hex(convert.okhsv_to_rgba(240deg, 1, 0.8));
+  color: convert.color_to_hex(convert.okhsv_to_rgba(240deg, 1, 0.7));
   text-decoration: none;
 
   &:hover {
-    color: convert.color_to_hex(convert.okhsv_to_rgba(45deg, 1, 0.8));
+    color: convert.color_to_hex(convert.okhsv_to_rgba(60deg, 1, 0.7));
     text-decoration: underline;
   }
 
