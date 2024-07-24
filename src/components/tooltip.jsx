@@ -236,19 +236,19 @@ export default function createTooltip(anchor) {
 };
 
 /** @type {Number} Animation request ID */
-let requestId = 0;
+// let requestId = 0;
 
-function animate() {
-  requestId = requestAnimationFrame(animate);
+// function animate() {
+//   requestId = requestAnimationFrame(animate);
 
-  try {
-    if (activeTooltip === null) return;
+//   try {
+//     if (activeTooltip === null) return;
 
-    updatePosition(activeTooltip);
-  } catch(e) {
-    console.error(e);
-    cancelAnimationFrame(requestId);
-  }
-};
+//     updatePosition(activeTooltip);
+//   } catch(e) {
+//     console.error(e);
+//     cancelAnimationFrame(requestId);
+//   }
+// };
 
-animate();
+// animate();
