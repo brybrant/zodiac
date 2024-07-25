@@ -234,21 +234,3 @@ export default function createTooltip(anchor) {
 
   index++;
 };
-
-/** @type {Number} Animation request ID */
-// let requestId = 0;
-
-// function animate() {
-//   requestId = requestAnimationFrame(animate);
-
-//   try {
-//     if (activeTooltip === null) return;
-
-//     updatePosition(activeTooltip);
-//   } catch(e) {
-//     console.error(e);
-//     cancelAnimationFrame(requestId);
-//   }
-// };
-
-// animate();
