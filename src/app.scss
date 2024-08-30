@@ -92,6 +92,33 @@ a {
   }
 
   svg {
+    vertical-align: top;
     fill: currentColor;
+  }
+}
+
+.github-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: $header-height - 8px;
+  height: $header-height - 8px;
+  padding: 8px;
+  pointer-events: auto;
+
+  a {
+    display: block;
+    border-radius: 50%;
+    color: #fff;
+    opacity: 0.5;
+
+    &:hover {
+      color: #fff;
+      opacity: 1;
+    }
+  }
+
+  svg {
+    border-radius: 50%;
   }
 }
