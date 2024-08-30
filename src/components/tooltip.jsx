@@ -56,9 +56,7 @@ function updatePosition(tooltip) {
     middleware: [
       offset(8),
       flip(),
-      shift({
-        padding: 48,
-      }),
+      shift(),
       arrow({
         element: tooltip.arrow,
         padding: 14,
