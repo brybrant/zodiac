@@ -55,6 +55,7 @@ export const Stars = {
     y: 322.3671,
   },
   mu: {
+    placement: 'bottom',
     magnitude: 3.88,
     temperature: 6989,
     x: 31.481,
