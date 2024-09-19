@@ -20,18 +20,18 @@
   },
   "dependencies": {
     "@brybrant/fade-scroll": "^1.0.1",
-    "@floating-ui/dom": "^1.6.10",
+    "@floating-ui/dom": "^1.6.11",
     "@glidejs/glide": "^3.6.2",
-    "preact": "^10.23.2"
+    "preact": "^10.24.0"
   },
   "devDependencies": {
     "@brybrant/configs": "github:brybrant/configs",
-    "@brybrant/sass-okhsv-okhsl": "github:brybrant/sass-okhsv-okhsl",
-    "@preact/preset-vite": "^2.9.0",
-    "eslint-config-preact": "^1.4.0",
-    "sass": "^1.77.8",
-    "vite": "^5.4.2",
-    "vite-plugin-eslint2": "^4.4.0",
+    "@brybrant/sass-okhsv-okhsl": "^1.0.0",
+    "@preact/preset-vite": "^2.9.1",
+    "eslint-config-preact": "^1.5.0",
+    "sass": "^1.79.1",
+    "vite": "^5.4.6",
+    "vite-plugin-eslint2": "^4.4.1",
     "vite-plugin-stylelint": "^5.3.1"
   },
   "browserslist": [
