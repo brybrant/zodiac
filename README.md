@@ -1,4 +1,4 @@
-# Preact + Vite
+# Zodiac
 
 Zodiac constellations made with [Preact](https://preactjs.com/) and [Vite](https://vitejs.dev) by Matt Bryant.
 
