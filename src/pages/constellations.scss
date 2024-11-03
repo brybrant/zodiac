@@ -3,8 +3,12 @@
   top: 0;
   left: 0;
   height: 100%;
-  background: url('/stars.webp') 50% 50%;
+  background: url('/stars.webp') 50% 50% / 13.333%;
   will-change: transform;
+
+  @media (width >= 1025px) {
+    background-size: 6.666%;
+  }
 }
 
 .constellation-container {

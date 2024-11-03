@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'preact/hooks';
 
 /**
  * @typedef {Object} StarData
- * @prop {string} p - Star tooltip placement
+ * @prop {string} [p] - Star tooltip placement
  * @prop {string} [n] - Star name
  * @prop {string} t - Star temperature (HEX color)
  * @prop {string} [d] - Star designation
@@ -17,7 +17,7 @@ import { useEffect, useRef } from 'preact/hooks';
  * @typedef {Object} Constellation
  * @prop {string} n - Constellation name
  * @prop {string} s - Constellation suffix
- * @prop {string[][]} p - Constellation paths
+ * @prop {string[]} p - Constellation paths
  * @prop {Object.<string, StarData>} d - Constellation stars
  * @prop {string} v - Constellation viewBox
  * @prop {number} a - Constellation aspect ratio
@@ -100,9 +100,6 @@ export default function Constellations(props) {
 
     backgroundCSS.transitionProperty = 'transform';
     backgroundCSS.transitionTimingFunction = animationTimingFunc;
-    backgroundCSS.backgroundSize = `${
-      documentWidth > 1024 ? documentWidth * 0.5 : documentWidth
-    }px`;
     backgroundCSS.width = `${documentWidth * 7.5}px`;
     backgroundCSS.transform = translate(slider.index + 1);
 
@@ -115,9 +112,6 @@ export default function Constellations(props) {
       document.dispatchEvent(slide);
 
       documentWidth = document.body.offsetWidth;
-      backgroundCSS.backgroundSize = `${
-        documentWidth > 1024 ? documentWidth * 0.5 : documentWidth
-      }px`;
       backgroundCSS.width = `${documentWidth * 7.5}px`;
       backgroundCSS.transform = translate(slider.index + 1);
     });
