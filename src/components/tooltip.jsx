@@ -1,10 +1,8 @@
-import {
-  computePosition,
-  flip,
-  shift,
-  offset,
-  arrow,
-} from '@floating-ui/dom';
+import { useEffect, useRef } from 'preact/hooks';
+
+import { computePosition, flip, shift, arrow } from '@floating-ui/dom';
+
+import External from '../../node_modules/@brybrant/svg-icons/External.svg';
 
 const sideLUT = {
   top: 'bottom',
@@ -14,221 +12,215 @@ const sideLUT = {
 };
 
 /**
- * @typedef {Object} Tooltip
- * @prop {Object} props - Tooltip properties
- * @prop {String} props.content - Tooltip content
- * @prop {String} [props.title] - Tooltip title
- * @prop {String} [props.href] - Tooltip link
- * @prop {Boolean} [props.toggle] - Toggle tooltip on clicking anchor?
- * @prop {HTMLElement} anchor - Tooltip anchor
+ * @typedef {Object} TooltipObject
+ * @prop {HTMLElement} anchor - Anchor element
  * @prop {HTMLElement} tooltip - Tooltip element
- * @prop {HTMLElement} arrow - Tooltip arrow
- * @prop {HTMLElement} content - Tooltip content
- * @prop {Number} animation - Tooltip animation request ID
  */
 
-/** @type {Tooltip|null} The currently active tooltip or null */
+/** @type {TooltipObject|null} The currently active tooltip or null */
 let activeTooltip = null;
 
-/** @type {Tooltip[]} Complete array of tooltips, ordered by tooltip ID */
-const tooltips = [];
+/** @type {Map<string, TooltipObject>} */
+const tooltips = new Map();
 
-/** @type {Number} Tooltip index (ID) */
+/** Tooltip index (ID) */
 let index = 0;
 
 /**
  * Round by Device Pixel Ratio
- * @param {Number} value - Pixel coordinate
- * @returns {Number} Pixel coordinate rounded by device pixel ratio
+ * @param {number} value - Pixel coordinate
+ * @returns {number} Pixel coordinate rounded by device pixel ratio
  */
 function roundByDPR(value) {
   const dpr = window.devicePixelRatio || 1;
   return Math.round(value * dpr) / dpr;
-};
+}
 
 /**
  * Update the position of a tooltip
- * @param {Tooltip} tooltip
+ * @param {TooltipObject} tooltipObject
  */
-function updatePosition(tooltip) {
-  computePosition(tooltip.anchor, tooltip.tooltip, {
-    placement: tooltip.props.placement || 'top',
+function updatePosition(tooltipObject) {
+  const tooltipArrow = tooltipObject.tooltip.firstElementChild;
+
+  computePosition(tooltipObject.anchor, tooltipObject.tooltip, {
+    placement: tooltipObject.tooltip.dataset.tooltipPlacement || 'top',
     middleware: [
-      offset(8),
       flip(),
       shift(),
       arrow({
-        element: tooltip.arrow,
-        padding: 14,
+        element: tooltipArrow,
+        padding: 20,
       }),
     ],
-  }).then(({x, y, placement, middlewareData}) => {
-    Object.assign(tooltip.tooltip.style, {
+  }).then(({ x, y, placement, middlewareData }) => {
+    Object.assign(tooltipObject.tooltip.style, {
       transform: `translate3d(${roundByDPR(x)}px,${roundByDPR(y)}px,0)`,
     });
 
-    const {x: arrowX, y: arrowY} = middlewareData.arrow;
+    const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
     const staticSide = sideLUT[placement.split('-')[0]];
 
-    Object.assign(tooltip.arrow.style, {
+    Object.assign(tooltipArrow.style, {
       left: arrowX != null ? `${arrowX}px` : '',
       top: arrowY != null ? `${arrowY}px` : '',
-      [staticSide]: '0',
+      [staticSide]: '6px',
     });
   });
-};
+}
 
 /**
  * Show a tooltip
- * @param {MouseEvent} event
+ * @this {HTMLElement} Tooltip anchor *or* tooltip
  */
-function showTooltip(event) {
-  const thisTooltip = tooltips[event.target.dataset.tooltipId];
+function showTooltip() {
+  /** @type {TooltipObject} */
+  const tooltipObject = tooltips.get(this.dataset.tooltipId);
 
-  if (!document.body.contains(thisTooltip.tooltip)) {
-    document.body.append(thisTooltip.tooltip);
-  };
+  const tooltip = tooltipObject.tooltip;
 
-  thisTooltip.anchor.setAttribute('aria-describedby', thisTooltip.tooltip.id);
+  tooltip.classList.remove('hidden');
 
-  updatePosition(thisTooltip);
+  updatePosition(tooltipObject);
 
-  thisTooltip.animation = requestAnimationFrame(() => {
-    thisTooltip.tooltip.classList.add('visible');
-  });
-};
+  tooltip.classList.add('visible');
+
+  if (tooltip.classList.contains('active')) return;
+
+  tooltip.classList.add('hover');
+}
 
 /**
  * Hide a tooltip
- * @param {MouseEvent} event
+ * @this {HTMLElement} Tooltip anchor *or* tooltip
  */
-function hideTooltip(event) {
-  const thisTooltip = tooltips[event.target.dataset.tooltipId];
+function hideTooltip() {
+  const tooltip = tooltips.get(this.dataset.tooltipId).tooltip;
 
-  if (thisTooltip.anchor.classList.contains('active')) return;
+  if (tooltip.classList.contains('active')) {
+    return tooltip.classList.remove('hover');
+  }
 
-  cancelAnimationFrame(thisTooltip.animation);
+  tooltip.classList.remove('visible');
 
-  thisTooltip.tooltip.classList.remove('visible');
-
-  removeTooltip(event);
-};
+  removeTooltip.call(tooltip);
+}
 
 /**
- * Remove a tooltip from the DOM
- * @param {MouseEvent} event
+ * Remove a tooltip
+ * @this {HTMLElement} Tooltip
  */
-function removeTooltip(event) {
-  const thisTooltip = tooltips[event.target.dataset.tooltipId];
+function removeTooltip() {
+  const tooltip = this;
 
-  if (
-    getComputedStyle(thisTooltip.tooltip).getPropertyValue('opacity') === '0'
-  ) {
-    thisTooltip.anchor.removeAttribute('aria-describedby');
-    thisTooltip.tooltip.remove();
-    if (activeTooltip === thisTooltip) activeTooltip = null;
-  };
-};
+  if (tooltip.classList.contains('active')) return;
+
+  if (getComputedStyle(tooltip).getPropertyValue('opacity') === '0') {
+    tooltip.classList.remove('hover');
+    tooltip.classList.add('hidden');
+  }
+}
 
 document.addEventListener('slide', () => {
   if (activeTooltip === null) return;
 
   activeTooltip.anchor.classList.remove('active');
+  activeTooltip.tooltip.classList.remove('active', 'visible');
 
-  hideTooltip({target: activeTooltip.anchor});
+  activeTooltip = null;
 });
 
 /**
  * Activate or deactivate a tooltip. The active tooltip is always visible until
  * slide is changed or a different tooltip is activated.
- * @param {MouseEvent} event
+ * @this {HTMLElement} Tooltip anchor
  */
-function activateTooltip(event) {
-  const thisTooltip = tooltips[event.target.dataset.tooltipId];
+function toggleTooltip() {
+  /** @type {TooltipObject} */
+  const tooltipObject = tooltips.get(this.dataset.tooltipId);
 
-  if (activeTooltip === null) {
-    activeTooltip = thisTooltip;
-    return thisTooltip.anchor.classList.add('active');
-  };
+  if (activeTooltip !== null) {
+    activeTooltip.anchor.classList.remove('active');
+    activeTooltip.tooltip.classList.remove('active');
 
-  if (activeTooltip === thisTooltip) {
-    return thisTooltip.anchor.classList.toggle('active');
-  };
+    if (activeTooltip === tooltipObject) {
+      return (activeTooltip = null);
+    }
 
-  activeTooltip.anchor.classList.remove('active');
-  activeTooltip.tooltip.classList.remove('visible');
-  activeTooltip = thisTooltip;
-  thisTooltip.anchor.classList.add('active');
-};
+    activeTooltip.tooltip.classList.remove('visible');
+  }
 
-const svgXMLNS = 'http://www.w3.org/2000/svg';
-
-const externalLink = document.createElementNS(svgXMLNS, 'svg');
-externalLink.setAttribute('viewBox', '0 0 375 500');
-const externalLinkPath = document.createElementNS(svgXMLNS, 'path');
-externalLinkPath.setAttribute('d', 'm310,275l30,30v65c0,16.57-13.43,30-30,30H110c-16.57,0-30-13.43-30-30v-200c0-16.57,13.43-30,30-30h65l30,30h-95v200h200v-95Zm-85-170l35,35h55l-150,150,25,25,150-150v60l30,30V105h-145Z');
-externalLink.append(externalLinkPath);
+  activeTooltip = tooltipObject;
+  this.classList.add('active');
+  tooltipObject.tooltip.classList.add('active');
+}
 
 /**
- * Create a new tooltip
- * @param {HTMLElement} anchor - HTML element with [data-tooltip] attribute
+ * @param {Object} props
+ * @param {import('preact/hooks').MutableRef} props.anchor - Anchor ref
+ * @param {Boolean} [props.toggle] - Toggle tooltip by clicking anchor?
+ * @param {string} [props.placement] - Tooltip placement
+ * @param {string} [props.title] - Tooltip title
+ * @param {string} [props.href] - Tooltip link
+ * @param {string} props.content - Tooltip content
  */
-export default function createTooltip(anchor) {
-  const tooltip = document.createElement('div');
-  const arrow = document.createElement('div');
-  const content = document.createElement('div');
-  const props = JSON.parse(anchor.dataset.tooltip);
+export default function Tooltip(props) {
+  const tooltipRef = useRef(null);
 
-  anchor.dataset.tooltipId = tooltip.dataset.tooltipId = index;
-
-  if (props.title) {
-    const title = document.createElement('span');
-    title.className = 'tooltip__title';
-    title.append(props.title);
-    title.append(document.createElement('br'));
-    content.append(title);
-  };
-
-  if (props.href) {
-    const link = document.createElement('a');
-    link.target = '_blank';
-    link.href = `https://theskylive.com/sky/stars/${props.href}`;
-    link.append(props.content);
-    link.append(externalLink.cloneNode(true));
-    content.append(link);
-  } else {
-    content.append(props.content);
-  };
-
-  tooltip.append(arrow, content);
-  tooltip.className = tooltip.role = 'tooltip';
-  tooltip.id = `tooltip-${index}`;
-
-  arrow.className = 'tooltip__arrow';
-  content.className = 'tooltip__content';
-
-  anchor.addEventListener('mouseenter', showTooltip);
-  anchor.addEventListener('mouseleave', hideTooltip);
-  anchor.addEventListener('focus', showTooltip);
-  anchor.addEventListener('blur', hideTooltip);
-
-  if (props.toggle === true) {
-    anchor.addEventListener('click', activateTooltip);
-  };
-
-  tooltip.addEventListener('mouseenter', showTooltip);
-  tooltip.addEventListener('mouseleave', hideTooltip);
-  tooltip.addEventListener('transitionend', removeTooltip);
-
-  tooltips.push({
-    props,
-    anchor,
-    tooltip,
-    arrow,
-    content,
-    animation: 0,
-  });
+  const tooltipID = String(index);
 
   index++;
-};
+
+  useEffect(() => {
+    /** @type {HTMLElement} Tooltip anchor */
+    const anchor = props.anchor.current;
+    /** @type {HTMLElement} Tooltip */
+    const tooltip = tooltipRef.current;
+
+    tooltips.set(tooltipID, {
+      anchor,
+      tooltip,
+    });
+
+    anchor.setAttribute('aria-describedby', `tooltip-${tooltipID}`);
+
+    anchor.dataset.tooltipId = tooltipID;
+    anchor.onmouseenter = showTooltip;
+    anchor.onmouseleave = hideTooltip;
+    if (props.toggle) anchor.onclick = toggleTooltip;
+
+    tooltip.onmouseenter = showTooltip;
+    tooltip.onmouseleave = hideTooltip;
+    tooltip.ontransitionend = removeTooltip;
+
+    return () => {
+      anchor.classList.remove('active');
+      tooltip.classList.remove('active', 'hover', 'visible');
+      tooltips.delete(tooltipID);
+    };
+  });
+
+  return (
+    <div
+      class='tooltip hidden'
+      role='tooltip'
+      id={`tooltip-${tooltipID}`}
+      data-tooltip-placement={props.placement}
+      data-tooltip-id={tooltipID}
+      ref={tooltipRef}
+    >
+      <div className='tooltip__arrow' />
+      <div className='tooltip__content'>
+        {props.title && <span className='tooltip__title'>{props.title}</span>}
+        {props.href && (
+          <a rel='noreferrer' target='_blank' href={props.href}>
+            {props.content}
+            <span dangerouslySetInnerHTML={{ __html: External }} />
+          </a>
+        )}
+        {!props.href && props.content}
+      </div>
+    </div>
+  );
+}

@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 # Custom
-modules
+.eslintcache
 .stylelintcache
-*.code-workspace
+src/pages/constellations.json

@@ -28,7 +28,7 @@ $font-path: '/fonts/FiraSansExtraCondensed/FiraSansExtraCondensed';
   left: 0;
   z-index: 2;
   width: max-content;
-  padding: 5px;
+  padding: 11px;
   font-size: 18px;
   font-family:
     'Fira Sans Extra Condensed',
@@ -44,16 +44,26 @@ $font-path: '/fonts/FiraSansExtraCondensed/FiraSansExtraCondensed';
   will-change: opacity;
   backface-visibility: hidden;
 
-  &.visible {
+  &.hidden {
+    visibility: hidden;
+  }
+
+  &.active, &.visible {
+    z-index: 3;
     opacity: 1;
     transition-timing-function: ease-out;
+  }
+
+  &.hover {
+    z-index: 4;
   }
 
   svg {
     display: inline-block;
     vertical-align: top;
-    width: 16.5px;
-    height: 22px;
+    width: 14px;
+    height: 14px;
+    margin: 4px 0 4px 4px;
   }
 }
 
@@ -70,6 +80,7 @@ $font-path: '/fonts/FiraSansExtraCondensed/FiraSansExtraCondensed';
 }
 
 .tooltip__title {
+  display: block;
   font-weight: 600;
 }
 

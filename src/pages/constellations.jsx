@@ -1,218 +1,84 @@
 import { Horizontal } from '@brybrant/fade-scroll';
 import Glide from '@glidejs/glide';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 
-import * as Aries from '../constellations/aries';
-import * as Taurus from '../constellations/taurus';
-import * as Gemini from '../constellations/gemini';
-import * as Cancer from '../constellations/cancer';
-import * as Leo from '../constellations/leo';
-import * as Virgo from '../constellations/virgo';
-import * as Libra from '../constellations/libra';
-import * as Scorpio from '../constellations/scorpio';
-import * as Sagittarius from '../constellations/sagittarius';
-import * as Capricorn from '../constellations/capricorn';
-import * as Aquarius from '../constellations/aquarius';
-import * as Pisces from '../constellations/pisces';
+/**
+ * @typedef {Object} StarData
+ * @prop {string} p - Star tooltip placement
+ * @prop {string} [n] - Star name
+ * @prop {string} t - Star temperature (HEX color)
+ * @prop {string} [d] - Star designation
+ * @prop {number} x - Star X coordinate
+ * @prop {number} y - Star Y coordinate
+ * @prop {number} r - Star width (radius * 2)
+ */
 
-import * as SVG from '../components/svg';
+/**
+ * @typedef {Object} Constellation
+ * @prop {string} n - Constellation name
+ * @prop {string} s - Constellation suffix
+ * @prop {string[][]} p - Constellation paths
+ * @prop {Object.<string, StarData>} d - Constellation stars
+ * @prop {string} v - Constellation viewBox
+ * @prop {number} a - Constellation aspect ratio
+ */
+
+/** @type {Constellation[]} */
+import constellations from './constellations.json';
+
+import AquariusGlyph from '../glyphs/aquarius.svg';
+import AriesGlyph from '../glyphs/aries.svg';
+import CancerGlyph from '../glyphs/cancer.svg';
+import CapricornGlyph from '../glyphs/capricorn.svg';
+import GeminiGlyph from '../glyphs/gemini.svg';
+import LeoGlyph from '../glyphs/leo.svg';
+import LibraGlyph from '../glyphs/libra.svg';
+import PiscesGlyph from '../glyphs/pisces.svg';
+import SagittariusGlyph from '../glyphs/sagittarius.svg';
+import ScorpioGlyph from '../glyphs/scorpio.svg';
+import TaurusGlyph from '../glyphs/taurus.svg';
+import VirgoGlyph from '../glyphs/virgo.svg';
+
+const glyphs = {
+  Aries: AriesGlyph,
+  Taurus: TaurusGlyph,
+  Gemini: GeminiGlyph,
+  Cancer: CancerGlyph,
+  Leo: LeoGlyph,
+  Virgo: VirgoGlyph,
+  Libra: LibraGlyph,
+  Scorpio: ScorpioGlyph,
+  Sagittarius: SagittariusGlyph,
+  Capricorn: CapricornGlyph,
+  Aquarius: AquariusGlyph,
+  Pisces: PiscesGlyph,
+};
+
+import { Bullet, bullets } from '../components/bullet';
+
+import Star from '../components/star';
 
 import './constellations.scss';
 import '../fade-scroll.scss';
 
 const slide = new Event('slide');
 
-const Constellations = [
-  {
-    name: 'Aries',
-    glyph: Aries.Glyph,
-    stars: Aries.Stars,
-    suffix: 'Arietis',
-    paths: [
-      ['41', 'alpha', 'beta', 'gamma2'],
-    ],
-  },
-  {
-    name: 'Taurus',
-    glyph: Taurus.Glyph,
-    stars: Taurus.Stars,
-    suffix: 'Tauri',
-    paths: [
-      ['beta', 'tau', 'epsilon', 'delta1', 'gamma', 'theta2', 'alpha', 'zeta'],
-      ['nu', 'mu', 'lambda', 'gamma'],
-      ['omicron', 'xi', '5', 'lambda'],
-    ],
-  },
-  {
-    name: 'Gemini',
-    glyph: Gemini.Glyph,
-    stars: Gemini.Stars,
-    suffix: 'Geminorum',
-    paths: [
-      ['kappa', 'upsilon', 'iota', 'tau', 'theta'],
-      ['beta', 'upsilon', 'delta', 'lambda', 'xi'],
-      ['alpha', 'tau', 'epsilon', 'nu'],
-      ['gamma', 'zeta', 'delta'],
-      ['1', 'eta', 'mu', 'epsilon'],
-    ],
-  },
-  {
-    name: 'Cancer',
-    glyph: Cancer.Glyph,
-    stars: Cancer.Stars,
-    suffix: 'Cancri',
-    paths: [
-      ['iota', 'gamma', 'delta', 'alpha'],
-      ['beta', '27', 'delta'],
-    ],
-  },
-  {
-    name: 'Leo',
-    glyph: Leo.Glyph,
-    stars: Leo.Stars,
-    suffix: 'Leonis',
-    paths: [
-      ['beta', 'delta', 'theta', 'iota', 'sigma'],
-      ['rho', 'theta', 'eta', 'gamma1', 'delta'],
-      ['pi', 'alpha', 'eta', 'omicron'],
-      ['gamma1', 'zeta', 'mu', 'epsilon', 'eta'],
-      ['mu', 'kappa', 'lambda', 'epsilon'],
-    ],
-  },
-  {
-    name: 'Virgo',
-    glyph: Virgo.Glyph,
-    stars: Virgo.Stars,
-    suffix: 'Virginis',
-    paths: [
-      ['109', 'tau', 'zeta', 'iota', 'mu'],
-      ['epsilon', 'delta', 'gamma', 'theta', 'alpha'],
-      ['zeta', 'gamma', 'eta', 'beta', 'nu', 'omicron', 'eta'],
-    ],
-  },
-  {
-    name: 'Libra',
-    glyph: Libra.Glyph,
-    stars: Libra.Stars,
-    suffix: 'Librae',
-    paths: [
-      ['sigma', 'alpha2', 'beta', 'gamma', 'alpha2'],
-      ['tau', 'upsilon', 'gamma'],
-    ],
-  },
-  {
-    name: 'Scorpio',
-    glyph: Scorpio.Glyph,
-    stars: Scorpio.Stars,
-    suffix: 'Scorpii',
-    paths: [
-      ['upsilon', 'lambda', 'kappa', 'iota1', 'theta', 'eta', 'zeta2', 'mu1', 'epsilon', 'tau', 'alpha', 'sigma', 'delta', 'beta1', 'nu'],
-      ['rho', 'pi', 'delta'],
-    ],
-  },
-  {
-    name: 'Sagittarius',
-    glyph: Sagittarius.Glyph,
-    stars: Sagittarius.Stars,
-    suffix: 'Sagittarii',
-    paths: [
-      ['beta2', 'beta1', 'iota', 'alpha'],
-      ['iota', 'theta1', 'omega', 'tau', 'zeta', 'phi', 'sigma', 'tau'],
-      ['zeta', 'epsilon', 'gamma2', 'delta', 'epsilon'],
-      ['mu', 'lambda', 'phi', 'delta', 'lambda'],
-      ['sigma', 'omicron', 'xi2'],
-      ['rho1', 'pi', 'omicron'],
-      ['epsilon', 'eta'],
-    ],
-  },
-  {
-    name: 'Capricorn',
-    glyph: Capricorn.Glyph,
-    stars: Capricorn.Stars,
-    suffix: 'Capricorni',
-    paths: [
-      ['delta', 'epsilon', 'zeta', 'omega', 'psi', 'omicron', 'beta', 'alpha2', 'theta', 'gamma', 'delta'],
-    ],
-  },
-  {
-    name: 'Aquarius',
-    glyph: Aquarius.Glyph,
-    stars: Aquarius.Stars,
-    suffix: 'Aquarii',
-    paths: [
-      ['101', '99', '98', 'psi1', 'phi', 'lambda', 'tau2', 'delta', 'psi1', '88', '89', '86'],
-      ['eta', 'zeta2', 'pi', 'alpha', 'gamma', 'zeta2'],
-      ['iota', 'beta', 'alpha', 'theta', 'lambda'],
-      ['epsilon', 'mu', 'beta'],
-    ],
-  },
-  {
-    name: 'Pisces',
-    glyph: Pisces.Glyph,
-    stars: Pisces.Stars,
-    suffix: 'Piscium',
-    paths: [
-      ['phi', 'upsilon', 'tau', 'phi', 'eta', 'omicron', 'alpha', 'nu', 'epsilon', 'delta', 'omega', 'iota', 'theta', 'gamma', 'kappa', 'lambda', 'iota'],
-    ],
-  },
-];
-
-const magnitudeScale = Math.pow(100, 1 / 5);
-
-let minMagnitude = Infinity;
-let maxMagnitude = 0;
-
-for (const constellation of Constellations) {
-  for (const star of Object.values(constellation.stars)) {
-    if (star.magnitude < minMagnitude) minMagnitude = star.magnitude;
-    if (star.magnitude > maxMagnitude) maxMagnitude = star.magnitude;
-  };
-};
-
-const magnitudeTotal = maxMagnitude + minMagnitude;
-minMagnitude = Math.pow(magnitudeScale, minMagnitude);
-maxMagnitude = Math.pow(magnitudeScale, maxMagnitude);
-
-const magnitudeDelta = maxMagnitude - minMagnitude;
-
-const minRadius = 6;
-const maxRadius = 23;
-const radiusDelta = maxRadius - minRadius;
-
-function getStarRadius(magnitude) {
-  magnitude = Math.pow(magnitudeScale, magnitudeTotal - magnitude);
-
-  return radiusDelta * (magnitude - minMagnitude) / magnitudeDelta + minRadius;
-};
-
-for (const constellation of Constellations) {
-  const viewBox = [0, 0, 0, 0];
-
-  for (const star of Object.values(constellation.stars)) {
-    star.r = getStarRadius(star.magnitude);
-
-    if (star.x - star.r < viewBox[0]) viewBox[0] = star.x - star.r;
-    if (star.y - star.r < viewBox[1]) viewBox[1] = star.y - star.r;
-    if (star.x + star.r > viewBox[2]) viewBox[2] = star.x + star.r;
-    if (star.y + star.r > viewBox[3]) viewBox[3] = star.y + star.r;
-  };
-
-  viewBox[0] -= 16;
-  viewBox[1] -= 16;
-  viewBox[2] += Math.abs(viewBox[0]) + 16;
-  viewBox[3] += Math.abs(viewBox[1]) + 16;
-
-  constellation.viewBox = viewBox;
-};
-
 function translate(index) {
   return `translateX(${-document.body.offsetWidth * index * 0.5}px)`;
-};
+}
 
-export default () => {
+/**
+ * @param {Object} props
+ * @param {import('preact/hooks').MutableRef} props.title
+ */
+export default function Constellations(props) {
+  const backgroundRef = useRef(null);
+
   useEffect(() => {
-    const title = document.getElementById('title');
-    const background = document.getElementById('stars-background');
+    /** @type {HTMLElement} */
+    const title = props.title.current;
+    /** @type {HTMLElement} */
+    const background = backgroundRef.current;
     const backgroundCSS = background.style;
 
     const slider = new Glide('.glide', {
@@ -222,7 +88,7 @@ export default () => {
       type: 'carousel',
     });
 
-    title.innerText = Constellations[slider.index].name;
+    title.innerText = constellations[slider.index].n;
 
     const animationDuration = `${slider.settings.animationDuration}ms`;
     const animationTimingFunc = slider.settings.animationTimingFunc;
@@ -240,8 +106,6 @@ export default () => {
     backgroundCSS.width = `${documentWidth * 7.5}px`;
     backgroundCSS.transform = translate(slider.index + 1);
 
-    const bullets = document.querySelectorAll('.glide__bullet');
-
     const bulletScroller = new Horizontal('.glide__bullets', {
       captureWheel: true,
       hideScrollbar: true,
@@ -258,10 +122,11 @@ export default () => {
       backgroundCSS.transform = translate(slider.index + 1);
     });
 
-    slider.on('run', ({direction}) => {
+    slider.on('run', ({ direction }) => {
       document.dispatchEvent(slide);
 
-      const thisBullet = bullets[slider.index];
+      /** @type {HTMLElement} */
+      const thisBullet = bullets[slider.index].anchor.current;
 
       const bulletPosition =
         thisBullet.offsetWidth * 0.5 + thisBullet.offsetLeft;
@@ -271,18 +136,18 @@ export default () => {
       bulletScroller.scrollPosition = bulletPosition - halfWrapperSize;
 
       title.className = 'switch';
-      title.innerText = Constellations[slider.index].name;
+      title.innerText = constellations[slider.index].n;
 
       running = true;
       backgroundCSS.transitionDuration = animationDuration;
 
       if (currentSlideIndex === 0 && direction === '<') {
         backgroundCSS.transform = translate(0);
-      } else if (currentSlideIndex === 11 & direction === '>') {
+      } else if (currentSlideIndex === 11 && direction === '>') {
         backgroundCSS.transform = translate(13);
       } else {
         backgroundCSS.transform = translate(slider.index + 1);
-      };
+      }
 
       currentSlideIndex = slider.index;
 
@@ -294,18 +159,17 @@ export default () => {
 
     slider.on('run.after', () => {
       backgroundCSS.transform = translate(slider.index + 1);
-      title.innerText = Constellations[slider.index].name;
+      title.innerText = constellations[slider.index].n;
       running = false;
     });
 
-    slider.on('move', ({movement}) => {
+    slider.on('move', ({ movement }) => {
       swipeTranslate = documentWidth * -0.5 + movement * -0.5;
     });
 
-    slider.on('swipe.start', () => backgroundCSS.transitionDuration = '');
+    slider.on('swipe.start', () => (backgroundCSS.transitionDuration = ''));
 
     slider.on('swipe.move', () => {
-      document.dispatchEvent(slide);
       backgroundCSS.transform = `translateX(${swipeTranslate}px)`;
     });
 
@@ -313,7 +177,7 @@ export default () => {
       if (running) return;
       backgroundCSS.transitionDuration = animationDuration;
       backgroundCSS.transform = `translateX(${swipeTranslate}px)`;
-      requestAnimationFrame(() => backgroundCSS.transitionDuration = '');
+      requestAnimationFrame(() => (backgroundCSS.transitionDuration = ''));
     });
 
     slider.mount();
@@ -321,51 +185,91 @@ export default () => {
     return () => {
       slider.destroy();
       bulletScroller.destroy();
+      bulletScroller.wrapper.replaceWith(bulletScroller.content);
     };
   });
 
   return (
-    <div className='glide'>
-      <div id='stars-background'/>
-      <div className='glide__iterators' data-glide-el='controls'>
+    <div class='glide'>
+      <div class='stars-background' ref={backgroundRef} />
+      <div class='glide__iterators' data-glide-el='controls'>
         <button
-          className='glide__iterator glide__iterator--prev'
+          class='glide__iterator glide__iterator--prev'
           data-glide-dir='<'
-        ><div className='glide__arrow'/>Previous</button>
+        >
+          <div class='glide__arrow' />
+          Previous
+        </button>
         <button
-          className='glide__iterator glide__iterator--next'
+          class='glide__iterator glide__iterator--next'
           data-glide-dir='>'
-        ><div className='glide__arrow'/>Next</button>
+        >
+          <div class='glide__arrow' />
+          Next
+        </button>
       </div>
 
-      <div className='glide__track' data-glide-el='track'>
-        <ul id='slides' className='glide__slides'>
-          {Constellations.map((constellation, index) => (
-            <li className='glide__slide' key={`constellation-${index}`}>
-              <SVG.Constellation constellation={constellation}/>
+      <div class='glide__track' data-glide-el='track'>
+        <ul id='slides' class='glide__slides'>
+          {constellations.map((constellation, index) => (
+            <li class='glide__slide' key={`constellation-${index}`}>
+              <div class='constellation-container'>
+                <div class='constellation'>
+                  <svg
+                    class='constellation-paths'
+                    xmlns='http://www.w3.org/2000/svg'
+                    viewBox={constellation.v}
+                  >
+                    {constellation.p.map((points, index) => (
+                      <path
+                        key={`${constellation.n}-path-${index}`}
+                        d={points}
+                      />
+                    ))}
+                  </svg>
+                  <div
+                    class='constellation-stars'
+                    style={{ paddingBottom: `${constellation.a}%` }}
+                  >
+                    {Object.entries(constellation.d).map(([star, data]) => (
+                      <Star
+                        key={`${constellation.n}-star-${star}`}
+                        viewBox={constellation.v}
+                        placement={data.p || null}
+                        star={star}
+                        designation={data.d || null}
+                        suffix={constellation.s}
+                        name={data.n || null}
+                        temperature={data.t}
+                        x={data.x}
+                        y={data.y}
+                        r={data.r}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className='glide__navigation'>
-        <div className='border-container border-container--bottom'>
-          <div className='border border--left'/>
-          <div className='glide__bullets' data-glide-el='controls[nav]'>
-            {Constellations.map((constellation, index) => (
-              <button
-                className='glide__bullet'
-                data-glide-dir={`=${index}`}
-                data-tooltip={JSON.stringify({content: constellation.name})}
-                key={`glyph-${index}`}
-              >
-                <SVG.Glyph glyph={constellation.glyph}/>
-              </button>
+      <div class='glide__navigation'>
+        <div class='border-container border-container--bottom'>
+          <div class='border border--left' />
+          <div class='glide__bullets' data-glide-el='controls[nav]'>
+            {constellations.map((constellation, index) => (
+              <Bullet
+                index={index}
+                key={`bullet-${index}`}
+                constellation={constellation.n}
+                glyph={glyphs[constellation.n]}
+              />
             ))}
           </div>
-          <div className='border border--right'/>
+          <div class='border border--right' />
         </div>
       </div>
     </div>
   );
-};
+}

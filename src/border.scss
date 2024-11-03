@@ -67,7 +67,7 @@
   top: 0;
 
   &:before, .border:before, .border:after {
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid rgba(#fff, 0.5);
   }
 
   .border:before {
@@ -87,7 +87,7 @@
   bottom: 0;
 
   &:before, .border:before, .border:after {
-    border-top: 1px solid #fff;
+    border-top: 1px solid rgba(#fff, 0.5);
   }
 
   .border:before {

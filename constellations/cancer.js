@@ -1,0 +1,65 @@
+export default {
+  name: 'Cancer',
+  suffix: 'Cancri',
+  paths: [
+    [
+      'iota',
+      'gamma',
+      'delta',
+      'alpha',
+    ],
+    [
+      'beta',
+      '27',
+      'delta',
+    ],
+  ],
+  stars: {
+    'beta': {
+      placement: 'right-end',
+      name: 'Tarf',
+      magnitude: 3.52,
+      temperature: 3824,
+      x: 355.5285,
+      y: 667.7373,
+    },
+    'delta': {
+      placement: 'right',
+      name: 'Asellus Australis',
+      magnitude: 3.94,
+      temperature: 4559,
+      x: 121.3006,
+      y: 362.0791,
+    },
+    'iota': {
+      placement: 'right',
+      magnitude: 4.02,
+      temperature: 4719,
+      x: 114.2089,
+      y: 0,
+    },
+    'alpha': {
+      placement: 'bottom',
+      name: 'Acubens',
+      magnitude: 4.25,
+      temperature: 8658,
+      x: 0,
+      y: 572.9241,
+    },
+    'gamma': {
+      placement: 'right',
+      name: 'Asellus Borealis',
+      magnitude: 4.66,
+      temperature: 9882,
+      x: 134.9051,
+      y: 249.2468,
+    },
+    '27': {
+      placement: 'right',
+      magnitude: 5.5,
+      temperature: 3649,
+      x: 267.7785,
+      y: 550.4241,
+    },
+  },
+};

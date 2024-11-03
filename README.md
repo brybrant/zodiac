@@ -2,6 +2,9 @@
 
 Zodiac constellations made with [Preact](https://preactjs.com/) and [Vite](https://vitejs.dev) by Matt Bryant.
 
+- Carousel made with [Glide](https://glidejs.com/)
+- Tooltips made with [Floating UI](https://floating-ui.com/)
+
 ## Fonts used
 
 ### Teko (Google Font)

@@ -1,4 +1,4 @@
-#stars-background {
+.stars-background {
   position: absolute;
   top: 0;
   left: 0;
@@ -7,8 +7,19 @@
   will-change: transform;
 }
 
+.constellation-container {
+  width: 100%;
+  height: 100%;
+}
+
 .constellation {
   position: relative;
+  display: inline-block;
+  max-width: 100%;
+  height: 100%;
+}
+
+.constellation-paths {
   width: 100%;
   height: 100%;
 
@@ -19,20 +30,25 @@
   }
 }
 
-@keyframes move {
-  100% {
-    transform: translateZ(10px);
-  }
+.constellation-stars {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
 }
 
 .star {
+  position: absolute;
   border-radius: 50%;
-  cursor: pointer;
-  fill: #fff;
-  transform: translateZ(0);
-  animation: 1s linear 0s infinite move;
-  will-change: transform;
-  backface-visibility: hidden;
+  background: #fff;
+
+  &:after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 
   &.active {
     outline: 2px solid rgba(#fff, 0.5);
