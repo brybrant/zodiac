@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import eslintPlugin from 'vite-plugin-eslint2';
-import preact from '@preact/preset-vite';
+import preactPlugin from '@preact/preset-vite';
 import stylelintPlugin from 'vite-plugin-stylelint';
 import svgoPlugin from 'vite-plugin-svgo';
 
@@ -30,6 +30,11 @@ export default defineConfig(({ mode }) => {
     },
     css: {
       postcss: configs.postCSSConfig,
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
     },
     plugins: [
       stylelintPlugin({
@@ -37,7 +42,7 @@ export default defineConfig(({ mode }) => {
         config: configs.stylelintConfig,
       }),
       svgoPlugin(configs.svgoConfig),
-      preact(),
+      preactPlugin(),
       eslintPlugin({
         lintInWorker: true,
       }),
